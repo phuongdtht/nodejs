@@ -1,0 +1,24 @@
+<div class="mt-4">
+    <h3>Đăng kí user</h3>
+
+    <form method="POST" action="/users/store">
+        <div class="form-group">
+            <label for="name">Tên nguoi dung</label>
+            <input type="text" class="form-control" id="name" name="name">
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="text" class="form-control" id="email" name="email">
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="text" class="form-control" id="password" name="password">
+        </div>
+        {{!-- <div class="form-group">
+            <label for="level">Trình độ</label>
+            <input type="text" class="form-control" id="level" name="level">
+        </div> --}}
+
+        <button type="submit" class="btn btn-primary">Thêm user</button>
+    </form>
+</div>
