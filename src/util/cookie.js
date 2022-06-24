@@ -16,7 +16,7 @@ module.exports = {
         return res.cookie.userInfo;
     },
     getAccessToken: function (res) {
-        const userInfo = this.getUserInfo();
+        // const userInfo = this.getUserInfo();
         const token = res.cookie.token
         return token;
     },

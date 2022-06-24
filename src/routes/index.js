@@ -12,7 +12,7 @@ function route(app) {
     app.use('/me', auth, meRouter);
     app.use('/courses', auth, coursesRouter);
     app.use('/users', auth, userRouter);
-    app.use('/', siteRouter);
+    app.use('/', auth, siteRouter);
 }
 
 module.exports = route;

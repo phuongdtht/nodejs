@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
-
+const { database, databaseToSession } = require('../db/database')
+require('dotenv').config();
 async function connect() {
     try {
-        await mongoose.connect(process.env.DB_HOST, {
+        await mongoose.connect(database(), {
             "auth": {
                 "authSource": "admin"
             },
@@ -11,7 +12,7 @@ async function connect() {
             useNewUrlParser: true,
             useUnifiedTopology: true,
             useCreateIndex: true,
-        }).then(res => console.log("thanhcong", res))
+        }).then((res) => res)
             .catch(handleErr => console.log(handleErr))
         console.log('Connect successfully!!!');
     } catch (error) {

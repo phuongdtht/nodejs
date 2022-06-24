@@ -1,10 +1,15 @@
 <div class="mt-4">
     <h3>Đăng kí user</h3>
-
+    {{#if errors}}
+    {{#each errors}}
+    {{this.msg}}
+    {{/each}}
+    {{/if}}
     <form method="POST" action="/users/store">
         <div class="form-group">
             <label for="name">Tên nguoi dung</label>
             <input type="text" class="form-control" id="name" name="name">
+            <div class="form-control"> {{this.msg}}</div>
         </div>
         <div class="form-group">
             <label for="email">Email</label>
@@ -21,4 +26,5 @@
 
         <button type="submit" class="btn btn-primary">Thêm user</button>
     </form>
+
 </div>

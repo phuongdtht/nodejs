@@ -4,19 +4,33 @@ const morgan = require('morgan');
 const methodOverride = require('method-override');
 const handlebars = require('express-handlebars');
 const cookieParser = require('cookie-parser');
+const session = require('express-session');
+
 
 const route = require('./routes');
 const db = require('./config/db');
-
+const MongoStore = require('connect-mongo');
+const { databaseToSession } = require('../src/config/db/database')
 require('dotenv').config();
 
 // Connect to DB
-db.connect();
+dbConnect = db.connect();
 
 const app = express();
-const port = 3000;
+const port = 3001;
 app.use(cookieParser());
-
+// use session
+app.use(session({
+    resave: true,
+    saveUninitialized: true,
+    secret: 'test',
+    cookie: { maxAge: 600000 },
+    store: new MongoStore({
+        mongoUrl: databaseToSession(),
+        dbName: 'test',
+        ttl: 60
+    })
+}));
 // Use static folder
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -42,8 +56,13 @@ app.engine(
         },
     }),
 );
+
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'resources', 'views'));
+
+app.set('view options', { user: {} });
+
+app.set('user', {});
 
 // Routes init
 route(app);

@@ -1,6 +1,10 @@
 <div class="mt-4">
     <h3>Login</h3>
-
+    {{#if errors}}
+    {{#each errors}}
+    {{this.msg}}
+    {{/each}}
+    {{/if}}
     <form method="POST" action="/auth/login">
         <div class="form-group">
             <label for="email">Email</label>

@@ -2,6 +2,7 @@ const User = require('../models/User');
 const { mongooseToObject } = require('../../util/mongoose');
 const { mutipleMongooseToObject } = require('../../util/mongoose');
 const { getAccessToken } = require('../../util/cookie')
+const { validationResult } = require('express-validator');
 
 class UserController {
     // [GET] /users/index
@@ -40,6 +41,11 @@ class UserController {
 
     // [POST] /courses/store
     store(req, res, next) {
+        const errors = validationResult(req);
+        if (errors) {
+            console.log(errors)
+            res.render('users/create', errors)
+        }
         console.log(req.body)
         // req.body.image = `https://img.youtube.com/vi/${req.body.videoId}/sddefault.jpg`;
         const user = new User(req.body);
