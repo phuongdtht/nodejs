@@ -5,12 +5,13 @@ const methodOverride = require('method-override');
 const handlebars = require('express-handlebars');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
-
+const flash = require('connect-flash');
+const toastr = require('express-toastr');
 
 const route = require('./routes');
 const db = require('./config/db');
 const MongoStore = require('connect-mongo');
-const { databaseToSession } = require('../src/config/db/database')
+const { databaseToSession } = require('../src/config/db/database');
 require('dotenv').config();
 
 // Connect to DB
@@ -20,17 +21,22 @@ const app = express();
 const port = 3001;
 app.use(cookieParser());
 // use session
-app.use(session({
-    resave: true,
-    saveUninitialized: true,
-    secret: 'test',
-    cookie: { maxAge: 600000 },
-    store: new MongoStore({
-        mongoUrl: databaseToSession(),
-        dbName: 'test',
-        ttl: 60
-    })
-}));
+app.use(
+    session({
+        resave: true,
+        saveUninitialized: true,
+        secret: 'test',
+        cookie: { maxAge: 600000 },
+        store: new MongoStore({
+            mongoUrl: databaseToSession(),
+            dbName: 'test',
+            ttl: 60,
+        }),
+    }),
+);
+
+app.use(flash());
+app.use(toastr());
 // Use static folder
 app.use(express.static(path.join(__dirname, 'public')));
 

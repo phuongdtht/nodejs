@@ -1,30 +1,41 @@
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs')
+const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const Response = require('../classes/Response');
 const { mongooseToObject } = require('../../util/mongoose');
 const { setUserInfo, setAccessToken } = require('../../util/cookie');
-const { validationResult } = require('express-validator');
+const { validationResult, matchedData } = require('express-validator');
 
 class AuthController {
     // [GET] /
     signIn(req, res) {
-
         res.render('auth/login');
     }
     async login(req, res, next) {
         const errors = validationResult(req);
-        if (errors.length > 0) {
-            console.log(errors)
-            //res.render('auth/login', errors)
-            res.redirect('/auth/sign-in')
+        if (!errors.isEmpty()) {
+            console.log(errors);
+            var errMsg = errors.mapped();
+            var inputData = matchedData(req);
+            console.log(inputData);
+            console.log(errMsg);
+            return res.render('auth/login', {
+                errors: errMsg,
+                inputData: inputData,
+            });
         }
-        const { email, password } = req.body
-        const user = await User.findByCredentials(res, email, password)
+        // if (errors.length > 0) {
+        //     console.log(errors)
+        //     //res.render('auth/login', errors)
+        //     res.redirect('/auth/login')
+        // }
+        const { email, password } = req.body;
+        console.log(req);
+        const user = await User.findByCredentials(req, res, email, password);
         if (!user) {
             //return Response.unauthorized(res)
             //return res.status(401).send({ error: 'Login failed! Check authentication credentials' })
-            res.redirect('/auth/sign-in')
+            res.redirect('/auth/login');
         }
         //generate token api
 
@@ -34,11 +45,10 @@ class AuthController {
         // setAccessToken(res, token, expireAt)
         //res.json({ user, token })
 
-        // generate session 
+        // generate session
         req.session.user = user;
 
         res.redirect('/users');
-
 
         // if (!user) {
         //     throw new Error({ error: 'Invalid login credentials' })
@@ -64,7 +74,7 @@ class AuthController {
                 if (err) {
                     return next(err);
                 } else {
-                    return res.redirect('/auth/sign-in');
+                    return res.redirect('/auth/login');
                 }
             });
         }

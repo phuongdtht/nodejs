@@ -11,7 +11,7 @@ function route(app) {
     app.use('/news', auth, newsRouter);
     app.use('/me', auth, meRouter);
     app.use('/courses', auth, coursesRouter);
-    app.use('/users', auth, userRouter);
+    app.use('/users', userRouter);
     app.use('/', auth, siteRouter);
 }
 

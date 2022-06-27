@@ -1,23 +1,37 @@
 <div class="mt-4">
     <h3>Đăng kí user</h3>
-    {{#if errors}}
-    {{#each errors}}
-    {{this.msg}}
-    {{/each}}
-    {{/if}}
-    <form method="POST" action="/users/store">
+
+    <form method="POST" action="/users/create">
         <div class="form-group">
             <label for="name">Tên nguoi dung</label>
-            <input type="text" class="form-control" id="name" name="name">
-            <div class="form-control"> {{this.msg}}</div>
+            <input type="text" class="form-control" id="name" name="name"
+                value="{{#if inputData.name }}{{inputData.name}}{{/if}}">
+            <p style="color: red;">
+                {{#if errors.name }}
+                {{errors.name.msg}}
+                {{/if}}
+            </p>
+
         </div>
         <div class="form-group">
             <label for="email">Email</label>
-            <input type="text" class="form-control" id="email" name="email">
+            <input type="text" class="form-control" id="email" name="email"
+                value="{{#if inputData.email }}{{inputData.email}}{{/if}}">
+            <p style="color: red;">
+                {{#if errors.email }}
+                {{errors.email.msg}}
+                {{/if}}
+            </p>
         </div>
         <div class="form-group">
             <label for="password">Password</label>
-            <input type="text" class="form-control" id="password" name="password">
+            <input type="text" class="form-control" id="password" name="password"
+                value="{{#if inputData.password }}{{inputData.password}}{{/if}}">
+            <p style="color: red;">
+                {{#if errors.password }}
+                {{errors.password.msg}}
+                {{/if}}
+            </p>
         </div>
         {{!-- <div class="form-group">
             <label for="level">Trình độ</label>

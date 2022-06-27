@@ -1,20 +1,35 @@
 <div class="mt-4">
     <h3>Login</h3>
-    {{#if errors}}
-    {{#each errors}}
-    {{this.msg}}
-    {{/each}}
-    {{/if}}
+
     <form method="POST" action="/auth/login">
         <div class="form-group">
             <label for="email">Email</label>
-            <input type="text" class="form-control" id="email" name="email">
+            <input type="text" class="form-control" id="email" name="email"
+                value="{{#if inputData.email }}{{inputData.email}}{{/if}}">
+            <p style=" color: red;">
+                {{#if errors.email }}
+                {{errors.email.msg}}
+                {{/if}}
+            </p>
         </div>
         <div class="form-group">
             <label for="password">Password</label>
-            <input type="text" class="form-control" id="password" name="password">
+            <input type="password" class="form-control" id="password" name="password"
+                value="{{#if inputData.password }}{{inputData.password}}{{/if}}">
+            <p style="color: red;">
+                {{#if errors.password }}
+                {{errors.password.msg}}
+                {{/if}}
+            </p>
         </div>
 
         <button type="submit" class="btn btn-primary">Login</button>
+        <p>
+            {{#if message.response_message}}
+            {{message.response_message.message}}
+            {{/if}}
+        </p>
     </form>
+
+
 </div>

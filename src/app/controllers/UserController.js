@@ -1,15 +1,15 @@
 const User = require('../models/User');
 const { mongooseToObject } = require('../../util/mongoose');
 const { mutipleMongooseToObject } = require('../../util/mongoose');
-const { getAccessToken } = require('../../util/cookie')
-const { validationResult } = require('express-validator');
+const { getAccessToken } = require('../../util/cookie');
+const { validationResult, matchedData } = require('express-validator');
 
 class UserController {
     // [GET] /users/index
     index(req, res, next) {
-        if (getAccessToken(res)) {
-            req.header('Authorization') = 'Bearer ' + getAccessToken(res)
-        }
+        // if (getAccessToken(res)) {
+        //     req.header('Authorization') = 'Bearer ' + getAccessToken(res)
+        // }
         Promise.all([User.find({}), User.countDocumentsDeleted()])
             .then(([users, deletedCount]) =>
                 res.render('users/index', {
@@ -29,7 +29,6 @@ class UserController {
                 res.render('users/show', {
                     user: mongooseToObject(user),
                 }),
-
             )
             .catch(next);
     }
@@ -42,16 +41,26 @@ class UserController {
     // [POST] /courses/store
     store(req, res, next) {
         const errors = validationResult(req);
-        if (errors) {
-            console.log(errors)
-            res.render('users/create', errors)
+        if (!errors.isEmpty()) {
+            console.log(errors);
+            var errMsg = errors.mapped();
+            var inputData = matchedData(req);
+            console.log(errMsg);
+            res.render('users/create', {
+                errors: errMsg,
+                inputData: inputData,
+            });
         }
-        console.log(req.body)
+        // if (errors) {
+        //     console.log(errors)
+        //     res.render('users/create', { errors: errMsg, inputData: inputData })
+        // }
+        console.log(req.body);
         // req.body.image = `https://img.youtube.com/vi/${req.body.videoId}/sddefault.jpg`;
         const user = new User(req.body);
         user.save()
             .then(() => res.redirect('/users'))
-            .catch((error) => { });
+            .catch((error) => {});
     }
 
     // [GET] /courses/:id/edit
