@@ -1,7 +1,7 @@
-const User = require('../models/User');
-const { mongooseToObject } = require('../../util/mongoose');
-const { mutipleMongooseToObject } = require('../../util/mongoose');
-const { getAccessToken } = require('../../util/cookie');
+const User = require('../../models/User');
+const { mongooseToObject } = require('../../../util/mongoose');
+const { mutipleMongooseToObject } = require('../../../util/mongoose');
+const { getAccessToken } = require('../../../util/cookie');
 const { validationResult, matchedData } = require('express-validator');
 
 class UserController {

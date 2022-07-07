@@ -18,7 +18,7 @@ require('dotenv').config();
 dbConnect = db.connect();
 
 const app = express();
-const port = 3001;
+const port = 3000;
 app.use(cookieParser());
 // use session
 app.use(
@@ -69,7 +69,7 @@ app.use(express.json());
 app.use(methodOverride('_method'));
 
 // HTTP logger
-// app.use(morgan('combined'));
+app.use(morgan('combined'));
 
 // Template engine
 app.engine(
@@ -79,6 +79,7 @@ app.engine(
         helpers: {
             sum: (a, b) => a + b,
         },
+        layout: 'main',
     }),
 );
 
