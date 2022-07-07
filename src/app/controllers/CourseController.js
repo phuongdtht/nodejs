@@ -18,7 +18,7 @@ class CourseController {
     }
     // [GET] /courses/create
     create(req, res, next) {
-        res.render('courses/create');
+        res.render('client/courses/create');
     }
 
     // [POST] /courses/store
@@ -35,7 +35,7 @@ class CourseController {
     edit(req, res, next) {
         Course.findById(req.params.id)
             .then((course) =>
-                res.render('courses/edit', {
+                res.render('client/courses/edit', {
                     course: mongooseToObject(course),
                 }),
             )

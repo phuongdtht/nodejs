@@ -9,7 +9,7 @@ const { validationResult, matchedData } = require('express-validator');
 class AuthController {
     // [GET] /
     signIn(req, res) {
-        res.render('auth/login');
+        res.render('client/auth/login');
     }
     async login(req, res, next) {
         const errors = validationResult(req);
@@ -19,7 +19,7 @@ class AuthController {
             var inputData = matchedData(req);
             console.log(inputData);
             console.log(errMsg);
-            return res.render('auth/login', {
+            return res.render('client/auth/login', {
                 errors: errMsg,
                 inputData: inputData,
             });
@@ -36,6 +36,15 @@ class AuthController {
             //return Response.unauthorized(res)
             //return res.status(401).send({ error: 'Login failed! Check authentication credentials' })
             res.redirect('/auth/login');
+        } else {
+            // generate session
+            req.session.user = user;
+            console.log(user.role)
+            if (user.role === 'admin') {
+                res.redirect('/admin/dashboard');
+            } else {
+                res.redirect('/users');
+            }
         }
         //generate token api
 
@@ -45,10 +54,8 @@ class AuthController {
         // setAccessToken(res, token, expireAt)
         //res.json({ user, token })
 
-        // generate session
-        req.session.user = user;
 
-        res.redirect('/users');
+
 
         // if (!user) {
         //     throw new Error({ error: 'Invalid login credentials' })
@@ -70,6 +77,7 @@ class AuthController {
     logout(req, res, next) {
         if (req.session) {
             // delete session object
+            res.app.settings.user = {}
             req.session.destroy(function (err) {
                 if (err) {
                     return next(err);

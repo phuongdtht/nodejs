@@ -16,14 +16,26 @@ class Response {
         // }
 
         if (message) {
-            req.flash('response_message', {
+            req.session.sessionFlash = {
                 class: success === true ? 'success' : 'danger',
                 icon: success === true ? 'la la-check' : 'la la-times',
                 message: message,
-            });
+            }
+            // console.log(req.flash('response_message'))
+            // res.locals.flash = req.flash('response_message')
+            //res.app.settings.flash = req.flash('response_message')
+            // {
+            //     class: success === true ? 'success' : 'danger',
+            //         icon: success === true ? 'la la-check' : 'la la-times',
+            //             message: message,
+            // }
+            //console.log(res.locals.flash)
+            //console.log(res.app.settings.flash)
         }
+
         if (redirect) {
-            return res.render(redirect, data);
+            console.log(redirect)
+            return res.render(redirect);
         }
     }
 
@@ -49,7 +61,6 @@ class Response {
     }
 
     error(req, res, data = null, message, redirect = null) {
-        console.log(req);
         return this.makeResponseData(
             req,
             res,

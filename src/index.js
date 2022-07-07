@@ -37,6 +37,25 @@ app.use(
 
 app.use(flash());
 app.use(toastr());
+
+app.use(function (req, res, next) {
+    res.locals.sessionFlash = req.session.sessionFlash;
+    delete req.session.sessionFlash;
+    if (res.locals.sessionFlash) {
+        if (res.locals.sessionFlash.class === 'success') {
+            req.toastr.success(res.locals.sessionFlash.message)
+        } else if (res.locals.sessionFlash.class === 'danger') {
+            req.toastr.error(res.locals.sessionFlash.message)
+        }
+    }
+    next();
+});
+
+app.use(function (req, res, next) {
+    res.locals.toasts = req.toastr.render()
+    next()
+});
+
 // Use static folder
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -69,6 +88,13 @@ app.set('views', path.join(__dirname, 'resources', 'views'));
 app.set('view options', { user: {} });
 
 app.set('user', {});
+// app.use(function (req, res, next) {
+//     res.locals.flash = req.flash('response_message');
+//     console.log(req.flash('response_message'))
+//     next();
+// });
+
+// app.set(function (req, res, next) { 'flash', { req.flash('response_message') })};
 
 // Routes init
 route(app);

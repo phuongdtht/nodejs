@@ -37,6 +37,10 @@ const userSchema = mongoose.Schema(
                 },
             },
         ],
+        role: {
+            type: String,
+            required: true,
+        },
     },
     {
         timestamps: true,
@@ -70,12 +74,14 @@ userSchema.statics.findByCredentials = async (req, res, email, password) => {
     if (!user) {
         //return res.status(401).send('Invalid login credentials')
         const message = 'login fail';
-        return Response.error(req, res, message, 'auth/login');
+        return Response.error(req, res, null, message, 'auth/login');
         //new Error({ error: 'Invalid login credentials' })
     }
     const isPasswordMatch = await bcrypt.compare(password, user.password);
     if (!isPasswordMatch) {
-        return Response.unauthorized(res);
+        const message = 'login fail';
+        return Response.error(req, res, null, message, 'auth/login');
+        //return Response.unauthorized(res);
         //return res.status(401).send('Invalid login credentials')
         //return new Error({ error: 'Invalid login credentials' })
     }
